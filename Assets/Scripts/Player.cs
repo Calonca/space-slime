@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
@@ -15,12 +16,22 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+
+        //Screenspace is defined in pixels.
+        //The bottom-left of the screen is (0, 0);
+        //the right-top is (pixelWidth, pixelHeight).
+        //The z position is in world units from the camera.
+        Vector3 screenPos = Camera.main.WorldToScreenPoint(transform.position);
+        if (screenPos.y < 0)
+            GameManager.EndGame("slime went to bottom of the screen");
+
         //Todo add touch input
         for (int i = 0; i < Input.touchCount; ++i)
         {
             if (Input.GetTouch(i).phase == TouchPhase.Began)
             {
-                Debug.Log("Touch pos: "+Input.GetTouch(i).position);
+                //Debug.Log("Touch pos: "+Input.GetTouch(i).position);
                 
                 // Construct a ray from the current touch coordinates
                 Ray ray = Camera.main.ScreenPointToRay(Input.GetTouch(i).position);
@@ -36,14 +47,16 @@ public class Player : MonoBehaviour
         if (Input.GetButton("Fire1"))
         {
 
-            Debug.Log("Screen mouse pos, x:"+Input.mousePosition.x+", y: "+ Input.mousePosition.y);
+            //Debug.Log("Screen mouse pos:"+Input.mousePosition);
             Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
            
             Vector2 dist = mousePos - transform.position;
 
-            Debug.Log(dist);
+            //Debug.Log("Distance is"+dist);
 
             m_Rigidbody.AddForce(Vector3.Normalize(dist)*clickStrenght*Time.deltaTime);
         }
     }
+
+
 }

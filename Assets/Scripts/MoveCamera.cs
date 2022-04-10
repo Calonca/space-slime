@@ -25,7 +25,11 @@ public class MoveCamera : MonoBehaviour
             //Interpolating between the initial camera positiona and the player position in 2D
             Vector2 lerpVal = Vector2.Lerp(cameraPos, playerPos, cameraSpeed * Time.deltaTime);
 
-            transform.position = new Vector3(lerpVal.x,lerpVal.y,camZ);
+            transform.position = new Vector3(
+                lerpVal.x,
+                Mathf.Max(lerpVal.y, cameraPos.y),
+                camZ
+                );
         }
     }
 }
