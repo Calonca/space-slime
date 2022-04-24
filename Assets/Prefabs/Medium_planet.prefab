@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 598703992651371102}
   - component: {fileID: 598703992651371103}
   - component: {fileID: 598703992651371100}
+  - component: {fileID: -7395505202237887224}
   m_Layer: 0
   m_Name: Medium_planet
   m_TagString: Planet
@@ -28,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 598703992651371098}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 6.46, y: 5.13, z: -10.817854}
-  m_LocalScale: {x: 2.2, y: 2.2, z: 1}
+  m_LocalScale: {x: 2.2, y: 2.2, z: 2.2}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -95,3 +96,22 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &-7395505202237887224
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 598703992651371098}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c52027899bcd65c4d8c6b20a6baf15b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PullRadius: 4.4
+  GravitationalPull: 1000
+  MinRadius: 0.5
+  DistanceMultiplier: 1
+  LayersToPull:
+    serializedVersion: 2
+    m_Bits: 4294967295
