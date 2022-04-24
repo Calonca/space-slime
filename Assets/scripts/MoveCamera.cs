@@ -4,7 +4,10 @@ using UnityEngine;
 
 public class MoveCamera : MonoBehaviour
 {
-    public float followSpeed,movementSpeed;
+    [Range(0, 1)]
+    public float followSpeed;
+    [Range(0, 10)]
+    public float movementSpeed;
     public const float camZ = -15;
     // Start is called before the first frame update
     void Start()
@@ -13,7 +16,7 @@ public class MoveCamera : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         Transform player = GameObject.FindWithTag("Player").transform;
         if (player != null)
@@ -23,11 +26,11 @@ public class MoveCamera : MonoBehaviour
 
 
             //Interpolating between the initial camera positiona and the player position in 2D
-            Vector2 lerpVal = Vector2.Lerp(cameraPos, playerPos, followSpeed * Time.deltaTime);
+            Vector2 lerpVal = Vector2.Lerp(cameraPos, playerPos, followSpeed);
 
             transform.position = new Vector3(
                 lerpVal.x,
-                Mathf.Max(lerpVal.y, cameraPos.y+movementSpeed*Time.deltaTime),
+                Mathf.Max(lerpVal.y, cameraPos.y + movementSpeed/100),
                 camZ
                 );
         }

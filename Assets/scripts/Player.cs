@@ -7,6 +7,9 @@ public class Player : MonoBehaviour
 {
     public float clickStrenght=1;
     Rigidbody m_Rigidbody;
+    private Vector2 dir = new Vector2(0,0);
+    private bool shouldUpdatePhyics;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -14,10 +17,9 @@ public class Player : MonoBehaviour
     }
 
     // Update is called once per frame
+    // Input need to be here insted of FixedUpdate otherwise we might lose inputs
     void Update()
     {
-
-
         //Screenspace is defined in pixels.
         //The bottom-left of the screen is (0, 0);
         //the right-top is (pixelWidth, pixelHeight).
@@ -54,8 +56,30 @@ public class Player : MonoBehaviour
 
             //Debug.Log("Distance is"+dist);
 
-            m_Rigidbody.AddForce(Vector3.Normalize(dist)*clickStrenght*Time.deltaTime);
+            setMovement(Vector3.Normalize(dist));
         }
+    }
+
+    //Sets the next movement that will be performed on the next cycle of the physic engine
+    public void setMovement(Vector2 v2)
+    {
+        dir = v2;
+        shouldUpdatePhyics = true;
+    }
+
+    //Used to update physics. The physics engine gets updated here
+    private void FixedUpdate()
+    {
+        if (shouldUpdatePhyics)
+        {
+            move();
+            shouldUpdatePhyics = false;
+        }
+    }
+
+    void move()
+    {
+        m_Rigidbody.AddForce(dir * clickStrenght);//Fixed update is fixed so you don't need delta time
     }
 
 
