@@ -15,7 +15,6 @@ public class MoveCamera : MonoBehaviour
         
     }
 
-    // Update is called once per frame
     void FixedUpdate()
     {
         Transform player = GameObject.FindWithTag("Player").transform;
