@@ -11,12 +11,16 @@ public class gravity_planets : MonoBehaviour
 
     public LayerMask LayersToPull;
 
+    private Player player;
+
     // Function that runs on every physics frame
     void FixedUpdate()
     {
+
+        if (!player.activateGravity)
+            return;
+
         Collider[] colliders = Physics.OverlapSphere(transform.position, PullRadius, LayersToPull); // Returns an array with all colliders touching or inside the sphere.
-
-
 
         foreach (var collider in colliders)
         {
@@ -33,5 +37,10 @@ public class gravity_planets : MonoBehaviour
             // Object mass also affects the gravitational pull
             rb.AddForce(direction.normalized * (GravitationalPull / distance) * rb.mass * Time.fixedDeltaTime);
         }
+    }
+
+    private void Start()
+    {
+        player = GameObject.FindWithTag("Player").GetComponent<Player   >();
     }
 }

@@ -6,9 +6,12 @@ using UnityEngine.SceneManagement;
 public class Player : MonoBehaviour
 {
     public float clickStrenght=1;
+    public bool activateGravity;
+
     Rigidbody m_Rigidbody;
     private Vector2 dir = new Vector2(0,0);
     private bool shouldUpdatePhyics;
+
 
     // Start is called before the first frame update
     void Start()
@@ -57,6 +60,14 @@ public class Player : MonoBehaviour
             //Debug.Log("Distance is"+dist);
 
             setMovement(Vector3.Normalize(dist));
+        }
+        if (Input.GetKeyDown("space"))
+        {
+            activateGravity = true;
+        }
+        if (Input.GetKeyUp("space"))
+        {
+            activateGravity = false;
         }
     }
 

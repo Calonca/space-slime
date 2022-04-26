@@ -9,15 +9,17 @@ public class MoveCamera : MonoBehaviour
     [Range(0, 10)]
     public float movementSpeed;
     public const float camZ = -15;
+
+    private Transform player;
     // Start is called before the first frame update
     void Start()
     {
-        
+        player = GameObject.FindWithTag("Player").transform;
     }
 
     void FixedUpdate()
     {
-        Transform player = GameObject.FindWithTag("Player").transform;
+        
         if (player != null)
         {
             Vector2 playerPos = player.position;
