@@ -86,6 +86,8 @@ public class Player : MonoBehaviour
             move();
             shouldUpdatePhyics = false;
         }
+        transform.position -= new Vector3(0,0,transform.position.z);
+        //m_Rigidbody.AddForce(new Vector3(0, 0, -100* transform.position.z));
     }
 
     void move()
