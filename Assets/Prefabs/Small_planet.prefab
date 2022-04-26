@@ -112,7 +112,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PullRadius: 2.2
   GravitationalPull: 800
-  MinRadius: 0.5
+  MinRadius: 0
   DistanceMultiplier: 2
   LayersToPull:
     serializedVersion: 2

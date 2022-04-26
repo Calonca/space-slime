@@ -32,7 +32,7 @@ public class gravity_planets : MonoBehaviour
 
             if (direction.magnitude < MinRadius) continue;
 
-            float distance = direction.sqrMagnitude * DistanceMultiplier + 1; // The distance formula
+            float distance = Mathf.Sqrt(direction.sqrMagnitude) * DistanceMultiplier + 1; // The distance formula
 
             // Object mass also affects the gravitational pull
             rb.AddForce(direction.normalized * (GravitationalPull / distance) * rb.mass * Time.fixedDeltaTime);

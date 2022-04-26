@@ -29,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 4267423261790279394}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -6.85, y: 2.43, z: -10.817854}
-  m_LocalScale: {x: 3, y: 3, z: 3}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5395442913295292917}
@@ -111,9 +111,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c52027899bcd65c4d8c6b20a6baf15b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PullRadius: 20
+  PullRadius: 5
   GravitationalPull: 5000
-  MinRadius: 0.5
+  MinRadius: 0
   DistanceMultiplier: 2
   LayersToPull:
     serializedVersion: 2
@@ -130,6 +130,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_RootOrder
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: d0e82f2096c8a33448c823854430b561,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: d0e82f2096c8a33448c823854430b561,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: d0e82f2096c8a33448c823854430b561,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: d0e82f2096c8a33448c823854430b561,
         type: 3}
