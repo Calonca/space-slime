@@ -31,7 +31,7 @@ public class gravity_planets : MonoBehaviour
             float distance = direction.sqrMagnitude * DistanceMultiplier + 1; // The distance formula
 
             // Object mass also affects the gravitational pull
-            rb.AddForce(direction.normalized * (GravitationalPull / distance) * rb.mass * Time.fixedDeltaTime);
+            //rb.AddForce(direction.normalized * (GravitationalPull / distance) * rb.mass * Time.fixedDeltaTime);
         }
     }
 }

@@ -8,9 +8,13 @@ public class Player : MonoBehaviour
     public float clickStrenght=1;
     Rigidbody m_Rigidbody;
     private Vector2 dir = new Vector2(0,0);
-    private bool shouldUpdatePhyics;
+    private Vector3 initialFingerToPlayerDist = new Vector2(0,0);
 
+    private bool joystickReleased =true;
     // Start is called before the first frame update
+
+    bool isColliding = false;
+    Vector3 cl;
     void Start()
     {
         m_Rigidbody = GetComponent<Rigidbody>();
@@ -51,12 +55,67 @@ public class Player : MonoBehaviour
 
             //Debug.Log("Screen mouse pos:"+Input.mousePosition);
             Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-           
-            Vector2 dist = mousePos - transform.position;
+            Vector3 mouse2d = new Vector3(mousePos.x, mousePos.y, 0);
+            /*
+            if (!isColliding)
+            {
+                m_Rigidbody.position = mouse2d;
+            }
+            else
+            {
+                //Transform hitObj = cl.transform;
+                //Debug.Log(cl.gameObject.name);
+                float distBefore = Vector3.Distance(cl, transform.position);
+                float distAfter = Vector3.Distance(cl, mouse2d);
+
+                //Debug.Log("Dis before" + distBefore);
+                //Debug.Log("Dis after" + distAfter);
+                if (distAfter>distBefore)
+                {
+
+                    m_Rigidbody.position = mouse2d;
+                }
+            }*/
+
+            //isColliding=false;
 
             //Debug.Log("Distance is"+dist);
+            if (joystickReleased)
+            {
+                //Saving distance from touch position to player position
+                initialFingerToPlayerDist = transform.position - mouse2d;
+                joystickReleased = false;
+            }
+            
+            //setMovement(new Vector3(mousePos.x,mousePos.y,0));
+            if (!joystickReleased){
+                Vector3 vel = (mouse2d + initialFingerToPlayerDist) - transform.position;
+                m_Rigidbody.velocity = vel * 20;
+            }
+ 
+        }
+        if (Input.GetMouseButtonUp(0)){
+            joystickReleased = true;
+        }
+    }
 
-            setMovement(Vector3.Normalize(dist));
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag.Equals("Planet"))
+        {
+
+            cl = collision.gameObject.transform.position;
+            isColliding = true;
+
+            //Debug.Log(cl.gameObject.name);
+        }
+    }
+
+    void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.tag.Equals("Planet"))
+        {
+            isColliding = false;
         }
     }
 
@@ -64,22 +123,24 @@ public class Player : MonoBehaviour
     public void setMovement(Vector2 v2)
     {
         dir = v2;
-        shouldUpdatePhyics = true;
     }
 
     //Used to update physics. The physics engine gets updated here
     private void FixedUpdate()
     {
-        if (shouldUpdatePhyics)
-        {
-            move();
-            shouldUpdatePhyics = false;
-        }
+    
+        Vector3 forwardDir = new Vector3(0,1,0);
+        m_Rigidbody.AddForce(5* forwardDir);//Move up
+        move();
+
     }
 
     void move()
     {
-        m_Rigidbody.AddForce(dir * clickStrenght);//Fixed update is fixed so you don't need delta time
+        Vector3 v3 = dir * clickStrenght;
+        //m_Rigidbody.position += v3;
+        //m_Rigidbody.AddForce(500*dir * clickStrenght);//Fixed update is fixed so you don't need delta time
+
     }
 
 
