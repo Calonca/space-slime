@@ -9,6 +9,7 @@ using UnityEditor;
 public class generateGameobjects : MonoBehaviour
 {
     public GameObject[] prefab_celestials;
+    public GameObject[] large_celestials;
     public GameObject chunck;
 
     public float chuncksize = 32;
@@ -175,8 +176,9 @@ public class generateGameobjects : MonoBehaviour
 
             if (!isColliding) // to check if any other sphere object(planet object ) generated within given pos and and radius
             {
-
-                GameObject terrainObj = Instantiate(prefab_celestials[Random.Range(0, prefab_celestials.Length)], new Vector3(initial_pos_x, initial_pos_y, 0), Quaternion.identity); //generate the planet of any of 3 diff size on the X and Y pos if above confition is false
+                GameObject toSpawn = prefab_celestials[Random.Range(0, prefab_celestials.Length)];
+                //toSpawn = prefab_celestials[Random.Range(4, 6)];
+                GameObject terrainObj = Instantiate(toSpawn, new Vector3(initial_pos_x, initial_pos_y, 0), Quaternion.identity); //generate the planet of any of 3 diff size on the X and Y pos if above confition is false
                 terrainObj.transform.parent = transform;
                 
             }

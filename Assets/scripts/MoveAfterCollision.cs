@@ -18,8 +18,7 @@ public class MoveAfterCollision : MonoBehaviour
         if (hasBeenDefeated)
             parentRigidbody.AddRelativeForce(new Vector3(0, -10000, 0));
     }
-
-    void OnCollisionEnter(Collision collision)
+    void OnTriggerEnter(Collider collision)
     {
         if (collision.gameObject.tag.Equals("Player") || collision.gameObject.name.Equals("back") || collision.gameObject.tag.Equals("EnemyShooter"))
         {
@@ -27,4 +26,5 @@ public class MoveAfterCollision : MonoBehaviour
             hasBeenDefeated = true;
         }
     }
+    
 }
