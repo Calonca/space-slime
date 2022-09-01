@@ -31,7 +31,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &2625465326655135484
 BoxCollider:
@@ -72,5 +72,5 @@ MonoBehaviour:
   - {fileID: 1662189989487814345, guid: bec2f007e1c3bea4a9171b48b03c7942, type: 3}
   - {fileID: 8161391678208346412, guid: 0ae9fdbd93fd6ab44b36537284095078, type: 3}
   - {fileID: 724808347976825858, guid: 09ac45b95700df041b1d51ebffabe4ee, type: 3}
-  chuck: {fileID: 2625465326655135473}
-  chucksize: 32
+  chunck: {fileID: 2625465326655135473}
+  chuncksize: 32

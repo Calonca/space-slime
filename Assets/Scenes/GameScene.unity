@@ -1129,6 +1129,18 @@ PrefabInstance:
     - target: {fileID: 2625465326655135487, guid: 680c6a962fc93c641b9290537210eeb7, type: 3}
       propertyPath: chuck
       value: 
-      objectReference: {fileID: 2625465326655135473, guid: 680c6a962fc93c641b9290537210eeb7, type: 3}
+      objectReference: {fileID: 2625465326655135473, guid: 680c6a962fc93c641b9290537210eeb7,
+        type: 3}
+    - target: {fileID: 2625465326655135487, guid: 680c6a962fc93c641b9290537210eeb7,
+        type: 3}
+      propertyPath: chunck
+      value: 
+      objectReference: {fileID: 2625465326655135473, guid: 680c6a962fc93c641b9290537210eeb7,
+        type: 3}
+    - target: {fileID: 2625465326655135487, guid: 680c6a962fc93c641b9290537210eeb7,
+        type: 3}
+      propertyPath: initialChunck
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 680c6a962fc93c641b9290537210eeb7, type: 3}
