@@ -1,109 +1,109 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class generateGameobjects : MonoBehaviour
 {
     static int p=25;//variable used to track position generate object
     public GameObject[] prefab_celestials;
+    public GameObject chuck;
+    bool generated = false;
+    public float chucksize = 32;
     // Start is called before the first frame update
 
     void Start()
     {
    
-        spawnobj_start();
 
+    }
+    void OnTriggerEnter(Collider collision)
+    {
+        if (collision.gameObject.tag.Equals("Player") && !generated)
+        {
+            //Debug.Log("Generating gameobjects for chuck at position " + transform.position);
+            spawnChunks();
+            spawnTerrain();
+        }
+    }
+
+    void spawnChunks()
+    {
+        Vector3 topPosition = transform.position + new Vector3(0, chucksize, 0);
+        Vector3 bottomPosition = transform.position + new Vector3(0, -chucksize, 0);
+        Vector3 rigthPosition = transform.position + new Vector3(chucksize, 0, 0);
+        Vector3 leftPosition = transform.position + new Vector3(-chucksize, 0, 0);
+        Vector3[] nearbyChuckPositions = { topPosition, bottomPosition, rigthPosition, leftPosition };
+
+        float halfSize = (chucksize +1) / 2;
+        //Create an array of nearby chucks if present
+        Vector3[] collidedPos =
+            Physics.OverlapBox(transform.position, new Vector3(halfSize,halfSize,halfSize))
+            .Select(c => c.gameObject)
+            .Where(o => o.tag.Equals("chuck"))
+            //.Where(o => o.gameObject.GetComponent<generateGameobjects>().generated==false)
+            .Select(c => c.transform.position)
+            .Where(o => o != transform.position)
+            .Where(pos =>
+                pos == topPosition ||
+                pos == bottomPosition ||
+                pos == rigthPosition || 
+                pos == leftPosition)
+            .ToArray();
+
+        Vector3[] spawnPoss = nearbyChuckPositions.Except(collidedPos).ToArray();
+        //print collidedGameObjects
+        foreach (Vector3 spawnPos in spawnPoss)
+        {
+                //Debug.Log("Will spawn chuck at"+ spawnPos);
+                GameObject newChunk = Instantiate(chuck, spawnPos, Quaternion.identity); //generate nearby missing chunks
+                newChunk.transform.parent = transform.parent;
+                newChunk.gameObject.name = "chuck" + spawnPos.ToString();
+        }
+    }
+
+    void spawnTerrain()
+    {
+        generated = true;
+        spawnobj_start();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (GameObject.Find("Player").transform.position.y >= p)
+        if (GameObject.Find("Player").transform.position.y - chucksize*2 >= transform.position.y)
         {
-            spawnobj(); //create planet objects
-            destroy_obj();// destroy used objects
+            Destroy(gameObject);
         }
-        //  Instantiate(prefab_celestials, new Vector3(0, 90, 0), Quaternion.identity);
     }
 
     void spawnobj_start(){    //random generation planets of 3 diff sizes  initially
-        int x = (int)Random.Range(20, 25); // number of objects to be generated initially
+        int x = (int)Random.Range(10, 15); // number of objects to be generated initially
         float initial_pos_y, initial_pos_x; // Z axis is fixed, defining other two coordinates, i.e, X and Y.
         int i = 0; // variable for counter to generate objects
 
         
         while (i<x)
         {
-            initial_pos_x = Random.Range(-7, 7); //range of X Coordinate to generate the planet object
-            initial_pos_y = Random.Range(8, 30); //range of Y Coordinate to generate the planet object.Initially generated till 30 units on Y axis.
+            float halfSize = chucksize / 2;
+            initial_pos_x = Random.Range(-halfSize, halfSize) +transform.position.x; //range of X Coordinate to generate the planet object
+            initial_pos_y = Random.Range(-halfSize, halfSize) +transform.position.y; //range of Y Coordinate to generate the planet object.Initially generated till 30 units on Y axis.
 
-            if (!Physics.CheckSphere(new Vector3(initial_pos_x, initial_pos_y, 0), 2)) // to check if any other sphere object(planet object ) generated within given pos and and radius
+            bool isColliding = Physics.OverlapSphere(new Vector3(initial_pos_x, initial_pos_y, transform.position.z),2)
+                .Where(c => !c.gameObject.tag.Equals("chuck"))
+                .ToArray().Length > 0;
+
+            if (!isColliding) // to check if any other sphere object(planet object ) generated within given pos and and radius
             {
 
-                Instantiate(prefab_celestials[Random.Range(0, prefab_celestials.Length)], new Vector3(initial_pos_x, initial_pos_y, 0), Quaternion.identity); //generate the planet of any of 3 diff size on the X and Y pos if above confition is false
+                GameObject terrainObj = Instantiate(prefab_celestials[Random.Range(0, prefab_celestials.Length)], new Vector3(initial_pos_x, initial_pos_y, 0), Quaternion.identity); //generate the planet of any of 3 diff size on the X and Y pos if above confition is false
+                terrainObj.transform.parent = transform;
                 i++;
             }
 
-         
         }
-
-    
 
     }
     
-    
- 
-
-    void spawnobj(){    //random generation planets of 3 diff sizes  initially
-        int x = (int)Random.Range(20, 25); // number of objects to be generated
-        float pos_y, pos_x; // Z axis is fixed, defining other two coordinates, i.e, X and Y.
-        int i = 0; // variable for counter to generate objects
-
-
-        while (i < x)
-        {
-            pos_x = Random.Range(-7,7); //range of X Coordinate to generate the planet object
-            pos_y = Random.Range(p+5,p+35);  //range of Y Coordinate to generate the planet object
-            /* sample value of p and range of Y within which objects are generated
-            p    min max      
-            25   30  60
-            55   60  90
-            85   90  120
-            115  120 150
-            .
-            .
-            .
-            */
-            Vector3 pos = new Vector3(pos_x, pos_y, 0);
-
-            if (!Physics.CheckSphere(pos, 2)) // to check if any other sphere object(planet object ) generated within given pos and and radius
-            {
-
-                Instantiate(prefab_celestials[Random.Range(0, prefab_celestials.Length)], pos, Quaternion.identity); //generate the planet of any of 3 diff size on the X and Y pos if above confition is false
-                i++;
-            }
-
-
-        }
-
-        p+=30;
-
-    }
-
-    void destroy_obj() {
-        GameObject[] planet = GameObject.FindGameObjectsWithTag("Planet");
-
-        foreach (GameObject temp in planet) {
-
-            if (temp.transform.position.y <p-45)
-            {
-
-                Destroy(temp); //destroys the planet objects which has y position  below the  value p-45
-            }
-
-        }
-
-
-    }
 }
 
