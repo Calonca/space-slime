@@ -6,9 +6,9 @@ public class Shooting : MonoBehaviour
 {
     public Transform firepoint;
     public GameObject bulletPrefab;
-    public float bulletForce = 200f;
+    public float bulletForce = 400f;
      public float dist;
-     float cooldown=0.5f;
+     float cooldown=0.75f;
     private float cooldownTimer;
 
     // Start is called before the first frame update
@@ -18,11 +18,11 @@ public class Shooting : MonoBehaviour
     }
 
     // Update is called once per frame
-    void FixedUpdate()
+    void Update()
     {
          dist = Vector3.Distance(GameObject.Find("Player").transform.position, transform.position);
        
-        if (dist < 20.0f )
+        if (dist < 15.0f )
         {
              Shoot();
 
@@ -40,8 +40,9 @@ public class Shooting : MonoBehaviour
 
         GameObject bullet = Instantiate(bulletPrefab, firepoint.position, firepoint.rotation);
         Rigidbody rb = bullet.GetComponent<Rigidbody>();
-        rb.AddForce(firepoint.up * bulletForce,ForceMode.Impulse);
-
-       // Destroy(bullet, 1f);
+        Vector3 direction = GameObject.Find("Player").transform.position - firepoint.position;
+        rb.AddForce(direction* bulletForce,ForceMode.Impulse);
+        
+        Destroy(bullet, 2f);
     }
 }
