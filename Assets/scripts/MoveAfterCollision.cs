@@ -21,9 +21,9 @@ public class MoveAfterCollision : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag.Equals("Player") || collision.gameObject.name.Equals("back"))
+        if (collision.gameObject.tag.Equals("Player") || collision.gameObject.name.Equals("back") || collision.gameObject.tag.Equals("EnemyShooter"))
         {
-            //Debug.Log("Enemy has been defeated");
+            Debug.Log("Enemy has been defeated");
             hasBeenDefeated = true;
         }
     }
