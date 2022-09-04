@@ -573,6 +573,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   clickStrenght: 0.05
   firepoint: {fileID: 867624660}
+  bulletPrefab: {fileID: 9126995192198331929, guid: 6d4d0a926af2a324c8c00a1e47a135da, type: 3}
 --- !u!135 &1528626400
 SphereCollider:
   m_ObjectHideFlags: 0
