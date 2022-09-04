@@ -6,11 +6,11 @@ public class Shooting : MonoBehaviour
 {
     public Transform firepoint;
     public GameObject bulletPrefab;
-    public float bulletForce = 400f;
+    public float bulletForce = 999999999f;
      public float dist;
      float cooldown=0.75f;
     private float cooldownTimer;
-
+    Rigidbody rb; GameObject bullet; Vector3 direction;
     // Start is called before the first frame update
     void Start()
     {
@@ -38,11 +38,21 @@ public class Shooting : MonoBehaviour
 
         cooldownTimer = cooldown;
 
-        GameObject bullet = Instantiate(bulletPrefab, firepoint.position, firepoint.rotation);
-        Rigidbody rb = bullet.GetComponent<Rigidbody>();
-        Vector3 direction = GameObject.Find("Player").transform.position - firepoint.position;
-        rb.AddForce(direction* bulletForce,ForceMode.Impulse);
-        
+        bullet = Instantiate(bulletPrefab, firepoint.position, firepoint.rotation);
+        rb = bullet.GetComponent<Rigidbody>();
+        direction = GameObject.Find("Player").transform.position - firepoint.position;
+
+        rb.AddForce(direction.normalized * bulletForce*15f,ForceMode.Impulse);
+       // rb.AddForce(transform.LookAt(GameObject.Find("Player").transform) * bulletForce * 15f, ForceMode.Impulse);
         Destroy(bullet, 2f);
+    }
+
+    void OnCollisionEnter(Collision col)
+    {
+        if (col.gameObject.tag == "Slime Bullet")
+        {
+            Destroy(gameObject);
+            Destroy(col.gameObject);
+        }
     }
 }

@@ -5,12 +5,17 @@ using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
-    public float clickStrenght=1;
+    public float clickStrenght = 1;
+    public Transform firepoint;
+    public GameObject bulletPrefab;
+    Rigidbody rb; GameObject bullet; Vector3 direction; 
     Rigidbody m_Rigidbody;
-    private Vector2 dir = new Vector2(0,0);
-    private Vector3 initialFingerToPlayerDist = new Vector2(0,0);
-
-    private bool joystickReleased =true;
+    private Vector2 dir = new Vector2(0, 0);
+    private Vector3 initialFingerToPlayerDist = new Vector2(0, 0);
+    public static List<GameObject> Enemies = new List<GameObject>();
+    private float closest_enemy, distance;
+    private bool joystickReleased = true;
+    static float  turn;
     // Start is called before the first frame update
 
     bool isColliding = false;
@@ -38,7 +43,7 @@ public class Player : MonoBehaviour
             if (Input.GetTouch(i).phase == TouchPhase.Began)
             {
                 //Debug.Log("Touch pos: "+Input.GetTouch(i).position);
-                
+
                 // Construct a ray from the current touch coordinates
                 Ray ray = Camera.main.ScreenPointToRay(Input.GetTouch(i).position);
                 /*
@@ -47,7 +52,7 @@ public class Player : MonoBehaviour
                 {
                     Instantiate(particle, transform.position, transform.rotation);
                 }*/
-                
+
             }
         }
         if (Input.GetButton("Fire1"))
@@ -86,17 +91,22 @@ public class Player : MonoBehaviour
                 initialFingerToPlayerDist = transform.position - mouse2d;
                 joystickReleased = false;
             }
-            
+
             //setMovement(new Vector3(mousePos.x,mousePos.y,0));
-            if (!joystickReleased){
+            if (!joystickReleased)
+            {
                 Vector3 vel = (mouse2d + initialFingerToPlayerDist) - transform.position;
                 m_Rigidbody.velocity = vel * 20;
             }
- 
+
         }
-        if (Input.GetMouseButtonUp(0)){
+        if (Input.GetMouseButtonUp(0))
+        {
             joystickReleased = true;
         }
+
+        //aimenemyauto();
+        shoot();
     }
 
     void OnCollisionEnter(Collision collision)
@@ -123,14 +133,15 @@ public class Player : MonoBehaviour
     public void setMovement(Vector2 v2)
     {
         dir = v2;
+       
     }
 
     //Used to update physics. The physics engine gets updated here
     private void FixedUpdate()
     {
-    
-        Vector3 forwardDir = new Vector3(0,1,0);
-        m_Rigidbody.AddForce(5* forwardDir);//Move up
+
+        Vector3 forwardDir = new Vector3(0, 1, 0);
+        m_Rigidbody.AddForce(5 * forwardDir);//Move up
         move();
 
     }
@@ -143,5 +154,50 @@ public class Player : MonoBehaviour
 
     }
 
+    /* void aimenemyauto()
+     {
 
+         closest_enemy = 1000f;
+         foreach (GameObject en in GameObject.FindGameObjectsWithTag("EnemyShooter"))
+         {
+             distance = Vector3.Distance(en.transform.position, transform.position);
+             if (distance < closest_enemy)
+             {
+                 Vector3 up = (transform.position - en.transform.position).normalized;
+                 Vector3 direction = (en.transform.position - firepoint.position).normalized;
+                 //transform.LookAt(en.transform, Vector3.down);
+                 Vector3 forward = direction - up * Vector3.Dot(direction, up);
+                 transform.rotation = Quaternion.LookRotation(forward.normalized, up.normalized);
+
+                 closest_enemy = distance;
+             }
+         }
+     }*/
+
+    void shoot() {
+        if (Input.GetKey("q"))
+        {
+            turn = turn + Time.deltaTime;
+            transform.rotation = Quaternion.Euler(0,0, turn * 100f);
+        }
+
+        if (Input.GetKey("e"))
+        {
+            turn = turn - Time.deltaTime;
+            transform.rotation = Quaternion.Euler(0, 0, turn * 100f);
+        }
+
+         if (Input.GetButtonDown("Fire2")) {
+
+
+            bullet = Instantiate(bulletPrefab, firepoint.position, firepoint.rotation);
+            rb = bullet.GetComponent<Rigidbody>();
+            
+
+            rb.AddForce(transform.up.normalized*150f, ForceMode.Impulse);
+            // rb.AddForce(transform.LookAt(GameObject.Find("Player").transform) * bulletForce * 15f, ForceMode.Impulse);
+            Destroy(bullet, 2f);
+            // Debug.Log("fire");
+        }
+    }
 }
