@@ -21,7 +21,7 @@ public class Generate_Reward : MonoBehaviour
 
         if (transform.childCount == 1) {
             rewardgeneratepos = this.transform.Find("RewardSpawn");
-            GameObject reward = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            GameObject reward = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
             reward.transform.localScale = new Vector3(2, 2, 2);
             reward.transform.position = rewardgeneratepos.position;
             

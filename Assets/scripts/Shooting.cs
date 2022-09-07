@@ -6,7 +6,7 @@ public class Shooting : MonoBehaviour
 {
     public Transform firepoint;
     public GameObject bulletPrefab;
-    public float bulletForce = 999999999f;
+    public float bulletForce;
      public float dist;
      float cooldown=0.75f;
     private float cooldownTimer;
@@ -44,7 +44,7 @@ public class Shooting : MonoBehaviour
         rb = bullet.GetComponent<Rigidbody>();
         direction = GameObject.Find("Player").transform.position - firepoint.position;
 
-        rb.AddForce(direction.normalized * bulletForce*15f,ForceMode.Impulse);
+        rb.AddForce(direction.normalized * bulletForce,ForceMode.Impulse);
        // rb.AddForce(transform.LookAt(GameObject.Find("Player").transform) * bulletForce * 15f, ForceMode.Impulse);
         Destroy(bullet, 2f);
     }

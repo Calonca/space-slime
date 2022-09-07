@@ -51,7 +51,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   firepoint: {fileID: 2566911482935412779}
   bulletPrefab: {fileID: 5040200902902197798, guid: f5222c7bb16de8c4ba67b22d61a625fc, type: 3}
-  bulletForce: 20
+  bulletForce: 50
   dist: 0
 --- !u!54 &2566911482756851398
 Rigidbody:
