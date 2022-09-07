@@ -11,10 +11,12 @@ public class Shooting : MonoBehaviour
      float cooldown=0.75f;
     private float cooldownTimer;
     Rigidbody rb; GameObject bullet; Vector3 direction;
+    private  int health,maxhealth; Transform healthbar;
     // Start is called before the first frame update
     void Start()
     {
-     
+        health = 3;
+        maxhealth=3;
     }
 
     // Update is called once per frame
@@ -51,8 +53,25 @@ public class Shooting : MonoBehaviour
     {
         if (col.gameObject.tag == "Slime Bullet")
         {
-            Destroy(gameObject);
+
+            if (health == 1)
+            {
+                Destroy(gameObject);
+            }
+            else
+            {
+                --health;
+                healthbarscale(health);
+
+            }
             Destroy(col.gameObject);
         }
+    }
+
+    void healthbarscale(int health) {
+        healthbar= this.transform.Find("Health");
+        healthbar.localScale = new Vector3(healthbar.localScale.x, 
+            (healthbar.localScale.y) *(float) health /(float) maxhealth,
+            healthbar.localScale.z); 
     }
 }
