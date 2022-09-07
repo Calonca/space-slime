@@ -143,7 +143,7 @@ public class Player : MonoBehaviour
     {
 
         Vector3 forwardDir = new Vector3(0, 1, 0);
-        m_Rigidbody.AddForce(5 * forwardDir);//Move up
+        //m_Rigidbody.AddForce(5 * forwardDir);//Move up
         move();
 
     }
