@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 public class Player : MonoBehaviour
 {
     public float clickStrenght = 1;
+    public float projectilesPerSecond = 3;
     public Transform firepoint;
     public GameObject bulletPrefab;
     Rigidbody rb; GameObject bullet; Vector3 direction; 
@@ -13,7 +14,7 @@ public class Player : MonoBehaviour
     private Vector2 dir = new Vector2(0, 0);
     private Vector3 initialFingerToPlayerDist = new Vector2(0, 0);
     public static List<GameObject> Enemies = new List<GameObject>();
-    private float closest_enemy, distance;
+    private float closest_enemy_distance, distance;
     private bool joystickReleased = true;
     static float  turn;
     // Start is called before the first frame update
@@ -23,6 +24,7 @@ public class Player : MonoBehaviour
     void Start()
     {
         m_Rigidbody = GetComponent<Rigidbody>();
+        InvokeRepeating("LaunchProjectile", 0.1f, 1/projectilesPerSecond);
     }
 
     // Update is called once per frame
@@ -105,8 +107,8 @@ public class Player : MonoBehaviour
             joystickReleased = true;
         }
 
-        //aimenemyauto();
-        shoot();
+        aimenemyauto();
+        //shoot();
     }
 
     void OnCollisionEnter(Collision collision)
@@ -154,25 +156,45 @@ public class Player : MonoBehaviour
 
     }
 
-    /* void aimenemyauto()
+    GameObject closestEnemy = null;
+    void aimenemyauto()
      {
-
-         closest_enemy = 1000f;
+        closestEnemy = null;
+        closest_enemy_distance = 10;
          foreach (GameObject en in GameObject.FindGameObjectsWithTag("EnemyShooter"))
          {
              distance = Vector3.Distance(en.transform.position, transform.position);
-             if (distance < closest_enemy)
+             if (distance < closest_enemy_distance)
              {
-                 Vector3 up = (transform.position - en.transform.position).normalized;
-                 Vector3 direction = (en.transform.position - firepoint.position).normalized;
-                 //transform.LookAt(en.transform, Vector3.down);
-                 Vector3 forward = direction - up * Vector3.Dot(direction, up);
-                 transform.rotation = Quaternion.LookRotation(forward.normalized, up.normalized);
-
-                 closest_enemy = distance;
+                closestEnemy = en;
+                closest_enemy_distance = distance;
              }
          }
-     }*/
+        if (closestEnemy == null)
+            return;
+        //transform.LookAt(closestEnemy.transform, new Vector3(0,1,0));
+        Vector3 differences = (closestEnemy.transform.position - transform.position).normalized;
+        Debug.Log("Angle is " + Mathf.Atan2(differences.y, differences.x));
+        transform.rotation = Quaternion.Euler(0, 0, Mathf.Rad2Deg * Mathf.Atan2(differences.y, differences.x));
+        //Vector3 forward = direction - up * Vector3.Dot(direction, up);
+        //transform.rotation = Quaternion.LookRotation(forward.normalized, up.normalized);
+        //Debug.Log("Closest enemy at position " + closestEnemy.transform.position);
+        closest_enemy_distance = distance;
+    }
+
+    void LaunchProjectile()
+    {
+       if (!joystickReleased || closestEnemy==null) { 
+            return; }
+        bullet = Instantiate(bulletPrefab, firepoint.position, firepoint.rotation);
+        rb = bullet.GetComponent<Rigidbody>();
+
+        rb.AddForce((closestEnemy.transform.position-transform.position).normalized * 150f, ForceMode.Impulse);
+        // rb.AddForce(transform.LookAt(GameObject.Find("Player").transform) * bulletForce * 15f, ForceMode.Impulse);
+        Destroy(bullet, 2f);
+        // Debug.Log("fire");
+    }
+
 
     void shoot() {
         if (Input.GetKey("q"))
@@ -190,14 +212,7 @@ public class Player : MonoBehaviour
          if (Input.GetButtonDown("Fire2")) {
 
 
-            bullet = Instantiate(bulletPrefab, firepoint.position, firepoint.rotation);
-            rb = bullet.GetComponent<Rigidbody>();
-            
-
-            rb.AddForce(transform.up.normalized*150f, ForceMode.Impulse);
-            // rb.AddForce(transform.LookAt(GameObject.Find("Player").transform) * bulletForce * 15f, ForceMode.Impulse);
-            Destroy(bullet, 2f);
-            // Debug.Log("fire");
+            LaunchProjectile();
         }
     }
 }
